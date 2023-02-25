@@ -21,7 +21,7 @@ export class SearchComponent<T> implements OnDestroy {
   @ContentChild(TemplateRef) addressTemplate!: TemplateRef<any>;
   // The @ViewChild query for TemplateRef here needs to be static because some code paths
   // lead to the overlay being created before change detection has finished for this component.
-  // Notably, another component may trigger `focus` on the search-trigger.
+  // Notably, another component may trigger `focus` on the angular-components-trigger.
 
   /** @docs-private */
   @ViewChild(TemplateRef, {static: true}) template!: TemplateRef<any>;
@@ -95,7 +95,7 @@ export class SearchComponent<T> implements OnDestroy {
     this.heightAdjustmentEvent.emit(calcOffset);
   }
 
-  //After loading the options save the values for the current search component
+  //After loading the options save the values for the current angular-components component
   setOptionValue(t: T, event: any) {
     let value = event.nativeElement.childNodes[0].nodeValue;
     let wrapper = new Wrapper(t, value);

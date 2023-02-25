@@ -139,13 +139,13 @@ export class _SearchTriggerBase<T> implements AfterViewInit, OnDestroy {
         distinctUntilChanged(),
         tap((text) => {
           this.controller.requestSearchResults();
-          //here forward input value to request search
+          //here forward input value to request angular-components
           this.controller.openPanel();
         })
       ).subscribe();
   }
 
-  /** Whether or not the search panel is open. */
+  /** Whether or not the angular-components panel is open. */
   get panelOpen(): boolean {
     return this._overlayAttached;
   }
@@ -290,7 +290,7 @@ export class _SearchTriggerBase<T> implements AfterViewInit, OnDestroy {
     if (this._previousValue !== value){
       this._previousValue = value;
       this.controller.requestSearchResults();
-      //here forward input value to request search
+      //here forward input value to request angular-components
       this.controller.openPanel();
     }
   }
@@ -338,7 +338,7 @@ export class _SearchTriggerBase<T> implements AfterViewInit, OnDestroy {
 }
 
 @Directive({
-  selector: 'input[search]',
+  selector: 'input[angular-components]',
   host: {
     '(click)': '_handleClick()',
     '(keydown)': '_handleKeydown($event)',

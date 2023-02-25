@@ -31,7 +31,7 @@ export class SearchController<T> implements OnDestroy {
       }
       this.prevLength = this.lengthOfOptions;
 
-      //validate search result
+      //validate angular-components result
       if (this.hasValidInput(t)){
         this.controller.setCurrentValidation(this.isValid = true);
         this.setObjectEvent.emit(false);
@@ -64,7 +64,7 @@ export class SearchController<T> implements OnDestroy {
         this.searchedObjects$.next(t);
       }, error => {
         this.reset();
-        console.log("No valid search results.");
+        console.log("No valid angular-components results.");
         //trigger no results found here
       });
     }
