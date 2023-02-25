@@ -1,0 +1,11 @@
+<ng-template>
+  <div (resized)="onResized($event)" class="options" [style.width.px]="optionsWidth">
+    <div *ngFor="let object of getObjects() | async">
+      <div class="option" (click)="setObject(object)" (ngInit)="setOptionValue(object, $event)"
+           (ngDestroy)="removeOptionValue(object, $event)" [style.padding-left]="optionPaddingLeft"
+           (mouseenter)="mouseEnter(object)" (mouseleave)="mouseLeave(object)">
+        <ng-container [ngTemplateOutlet]="addressTemplate" [ngTemplateOutletContext]="{$implicit: object}" ></ng-container>
+      </div>
+    </div>
+  </div>
+</ng-template>
