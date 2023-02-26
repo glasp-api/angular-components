@@ -2,6 +2,8 @@
 
 This library allows to show connected suggestions on multiple Angular Material Input Fields (levaraging from Angular's autocomplete library).
 
+![multi-search](https://user-images.githubusercontent.com/118767215/221435805-4016f94d-25c0-4b09-a9ba-462eabd746ff.gif)
+
 ## Installation & Module Configuration
 
 Run `npm -i @glasp/multi-search` to install the library. Please add the SearchModule as import in your app's module file.
