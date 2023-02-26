@@ -1,5 +1,5 @@
 <ng-template>
-  <div (resized)="onResized($event)" class="options" [style.width.px]="optionsWidth">
+  <div class="options" [style.width.px]="optionsWidth" (ngInit)="initResizeObserver($event)" (ngDestroy)="removeResizeObserver($event)">
     <div *ngFor="let object of getObjects() | async">
       <div class="option" (click)="setObject(object)" (ngInit)="setOptionValue(object, $event)"
            (ngDestroy)="removeOptionValue(object, $event)" [style.padding-left]="optionPaddingLeft"

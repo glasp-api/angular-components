@@ -1,13 +1,11 @@
 import {
   Attribute,
-  ChangeDetectorRef,
-  Component, ContentChild, EventEmitter, OnDestroy,
+  Component, ContentChild, EventEmitter, NgZone, OnDestroy,
   TemplateRef, ViewChild
 } from '@angular/core';
 import {SearchController} from "./search-controller";
 import {EntityWrapper, Wrapper} from "./wrapper";
 import {Observable, Subscription} from "rxjs";
-import {ResizedEvent} from 'angular-resize-event';
 
 @Component({
   selector: 'search',
@@ -15,7 +13,7 @@ import {ResizedEvent} from 'angular-resize-event';
   styleUrls: ['./search.component.scss'],
   exportAs: 'search'
 })
-export class SearchComponent<T> implements OnDestroy {
+export class SearchComponent<T extends Object> implements OnDestroy {
   heightAdjustmentEvent: EventEmitter<Number> = new EventEmitter<Number>();
 
   @ContentChild(TemplateRef) addressTemplate!: TemplateRef<any>;
@@ -33,12 +31,13 @@ export class SearchComponent<T> implements OnDestroy {
   mouseSubscriptions: Wrapper<Subscription, T>[] = [];
   selectedSubscription: Subscription;
   searchSubscriber: Subscription | null = null;
+  resizeObserver!: ResizeObserver;
 
   currentWrapper: EntityWrapper<T, string> | null = null;
 
   selectedValue: string = "";
 
-  constructor(private readonly cdr: ChangeDetectorRef, private controller: SearchController<T>) {
+  constructor(private controller: SearchController<T>, private zone: NgZone) {
     this.selectedSubscription = this.controller.setSelectedEvent.subscribe((object: T) => {
       let wrapper: EntityWrapper<T, string> = this.wrappers.filter((value, index, array) => this.compareEntity(value.getObject(), object))[0];
       this.selectedValue = wrapper.getValue();
@@ -50,7 +49,21 @@ export class SearchComponent<T> implements OnDestroy {
     this.searchSubscriber?.unsubscribe();
   }
 
-  onResized(event: ResizedEvent) {
+  initResizeObserver(event: any){
+    this.resizeObserver = new ResizeObserver(entries => {
+      this.zone.run(() => {
+        this.recalcHeight(entries[0].contentRect.height);
+      });
+    });
+    this.resizeObserver.observe(event.nativeElement);
+  }
+
+  removeResizeObserver(event: any){
+    this.resizeObserver.unobserve(event.nativeElement);
+  }
+
+  onResized(event: any) {
+    console.log(event.newRect.height);
     this.recalcHeight(event.newRect.height);
   }
 

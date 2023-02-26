@@ -59,7 +59,7 @@ export const MAT_SEARCH_SCROLL_STRATEGY_FACTORY_PROVIDER = {
 };
 
 @Directive()
-export class _SearchTriggerBase<T> implements AfterViewInit, OnDestroy {
+export class _SearchTriggerBase<T extends Object> implements AfterViewInit, OnDestroy {
   private _overlay: Overlay;
   private _overlayRef: OverlayRef | null | undefined;
   private _portal: TemplatePortal | undefined;
@@ -114,8 +114,10 @@ export class _SearchTriggerBase<T> implements AfterViewInit, OnDestroy {
   }
 
   ngAfterViewInit(): void {
+    let element1 = this._elRef.nativeElement.closest(".mat-form-field")
+    let element2 = element1 !== null ? element1 : this._elRef.nativeElement.closest(".mat-mdc-form-field");
     this.heightAdjustmentSubscription = this.search.heightAdjustmentEvent.subscribe((value) => {
-      this._elRef.nativeElement.closest(".mat-form-field").style.marginBottom = value + "px";
+      element2.style.marginBottom = value + "px";
       this._overlayRef?.updatePosition();
     });
     this.controller.registerConnectedElements(this._element.nativeElement);
@@ -233,7 +235,8 @@ export class _SearchTriggerBase<T> implements AfterViewInit, OnDestroy {
   }
 
   private _getConnectedElement(): HTMLElement {
-    return this._elRef.nativeElement.closest(".mat-form-field-flex");
+    let element1 = this._elRef.nativeElement.closest(".mat-form-field-flex");
+    return element1 !== null ? element1 : this._elRef.nativeElement.closest(".mat-mdc-text-field-wrapper");
   }
 
   private _getPanelWidth(): number {
@@ -241,7 +244,8 @@ export class _SearchTriggerBase<T> implements AfterViewInit, OnDestroy {
   }
 
   private _getPaddingLeft(): number {
-    return this.winRef.nativeWindow.getComputedStyle(this._elRef.nativeElement.closest(".mat-form-field-flex"), null).paddingLeft;
+    let element1 = this._elRef.nativeElement.closest(".mat-form-field-flex");
+    return this.winRef.nativeWindow.getComputedStyle(element1 !== null ? element1 : this._elRef.nativeElement.closest(".mat-mdc-text-field-wrapper"), null).paddingLeft;
   }
 
   closePanel(): void {
@@ -257,7 +261,9 @@ export class _SearchTriggerBase<T> implements AfterViewInit, OnDestroy {
   }
 
   private _resetMarginBottom(): void {
-    this._elRef.nativeElement.closest(".mat-form-field").style.marginBottom = "0px";
+    let element1 = this._elRef.nativeElement.closest(".mat-form-field")
+    let element2 = element1 !== null ? element1 : this._elRef.nativeElement.closest(".mat-mdc-form-field");
+    element2.style.marginBottom = "0px";
   }
 
   private _hasActiveOption(): boolean {
@@ -338,15 +344,16 @@ export class _SearchTriggerBase<T> implements AfterViewInit, OnDestroy {
 }
 
 @Directive({
-  selector: 'input[angular-components]',
+  selector: 'input[search]',
   host: {
     '(click)': '_handleClick()',
     '(keydown)': '_handleKeydown($event)',
     '(focusin)': '_handleFocus()'
   },
+  providers: [WindowRef],
   exportAs: 'searchTrigger'
 })
-export class SearchTriggerDirective<T> extends _SearchTriggerBase<T> {
+export class SearchTriggerDirective<T extends Object> extends _SearchTriggerBase<T> {
 }
 
 /**

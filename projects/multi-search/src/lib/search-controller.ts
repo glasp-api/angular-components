@@ -1,10 +1,16 @@
 import {EventEmitter, Inject, Injectable, InjectionToken, OnDestroy} from "@angular/core";
-import {Observable, ReplaySubject, Subject, Subscription} from "rxjs";
+import {Observable, Observer, ReplaySubject, Subject, Subscription} from "rxjs";
+
+export interface IController<T extends Object> {
+  provideSearchResults(params?: T): Observable<T[]>;
+  suggestionTrigger(input: T): boolean;
+  setCurrentValidation(status: boolean): void;
+}
 
 export const DATA_PROVIDER = new InjectionToken<IController<any>>('DATA_PROVIDER');
 
-@Injectable()
-export class SearchController<T> implements OnDestroy {
+@Injectable({providedIn: 'root'})
+export class SearchController<T extends Object> implements OnDestroy {
   setObjectEvent: EventEmitter<any> = new EventEmitter();
   openPanelEvent: EventEmitter<any> = new EventEmitter();
   hoverEnterEvent: EventEmitter<T> = new EventEmitter();
@@ -24,25 +30,27 @@ export class SearchController<T> implements OnDestroy {
   constructor(@Inject(DATA_PROVIDER) controller: IController<T>) {
     this.controller = controller;
 
-    this.searchSubscription = this.searchedObjects$.subscribe(t => {
-      this.lengthOfOptions = t.length;
-      if (this.prevLength === 0){
-        this.openPanelEvent.emit();
-      }
-      this.prevLength = this.lengthOfOptions;
-
-      //validate angular-components result
-      if (this.hasValidInput(t)){
-        this.controller.setCurrentValidation(this.isValid = true);
-        this.setObjectEvent.emit(false);
-      } else {
-        this.controller.setCurrentValidation(this.isValid = false);
-      }
-    });
+    this.searchSubscription = this.searchedObjects$.subscribe(t => this.processSearchResults(t));
   }
 
   ngOnDestroy() {
     this.searchSubscription.unsubscribe();
+  }
+
+  processSearchResults(t: T[]): void {
+    this.lengthOfOptions = t.length;
+    if (this.prevLength === 0){
+      this.openPanelEvent.emit();
+    }
+    this.prevLength = this.lengthOfOptions;
+
+    //validate angular-components result
+    if (this.hasValidInput(t)){
+      this.controller.setCurrentValidation(this.isValid = true);
+      this.setObjectEvent.emit(false);
+    } else {
+      this.controller.setCurrentValidation(this.isValid = false);
+    }
   }
 
   getObjects(): Observable<T[]> {
@@ -111,6 +119,7 @@ export class SearchController<T> implements OnDestroy {
 
   reset(): void {
     this.searchedObjects$ = new ReplaySubject<T[]>(1);
+    this.searchedObjects$.subscribe(t => this.processSearchResults(t));
     this.lengthOfOptions = 0;
     this.prevLength = 0;
   }
@@ -140,10 +149,4 @@ export class SearchController<T> implements OnDestroy {
   mouseLeave(t: T){
     this.hoverLeaveEvent.emit(t);
   }
-}
-
-export interface IController<T> {
-  provideSearchResults(params?: any): Observable<T[]>;
-  suggestionTrigger(inputs: any): boolean;
-  setCurrentValidation(status: boolean): void;
 }
