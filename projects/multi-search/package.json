@@ -1,6 +1,6 @@
 {
   "name": "@glasp/multi-search",
-  "version": "0.0.1",
+  "version": "0.0.7",
   "peerDependencies": {
     "@angular/core": "^15.2.0"
   },

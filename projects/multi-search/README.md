@@ -7,7 +7,7 @@ This library allows to show connected suggestions on multiple Angular Material I
 
 ## Installation & Module Configuration
 
-Run `npm -i @glasp/multi-search` to install the library. Please add the SearchModule as import in your app's module file.
+Run `npm i @glasp/multi-search` to install the library. Please add the SearchModule as import in your app's module file.
 
 ```typescript
 import {NgModule} from "@angular/core";

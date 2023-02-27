@@ -1,0 +1,29 @@
+<div [formGroup]="form">
+  <form>
+    <div class="block">
+      <mat-form-field class="character">
+        <mat-label>Character</mat-label>
+        <input type="text"
+               matInput
+               aria-label="character"
+               formControlName="characterInput"
+               [search]="character">
+        <search #character="search">
+          <ng-template let-role>{{role.character}}</ng-template>
+        </search>
+      </mat-form-field>
+
+      <mat-form-field class="actor">
+        <mat-label>Actor</mat-label>
+        <input type="text"
+               matInput
+               aria-label="actor"
+               formControlName="actorInput"
+               [search]="actor">
+        <search #actor="search">
+          <ng-template let-role>{{role.actor}}</ng-template>
+        </search>
+      </mat-form-field>
+    </div>
+  </form>
+</div>

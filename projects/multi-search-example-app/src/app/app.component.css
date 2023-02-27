@@ -1,0 +1,15 @@
+.block {
+  margin-left: 50px;
+  margin-top: 50px;
+  display: block;
+  width: 600px;
+}
+
+.character {
+  width: 45%;
+}
+
+.actor {
+  margin-left: 10%;
+  width: 45%;
+}

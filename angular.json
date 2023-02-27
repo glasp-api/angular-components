@@ -66,6 +66,99 @@
           }
         }
       }
+    },
+    "multi-search-example-app": {
+      "projectType": "application",
+      "schematics": {},
+      "root": "projects/multi-search-example-app",
+      "sourceRoot": "projects/multi-search-example-app/src",
+      "prefix": "app",
+      "architect": {
+        "build": {
+          "builder": "@angular-devkit/build-angular:browser",
+          "options": {
+            "outputPath": "dist/multi-search-example-app",
+            "index": "projects/multi-search-example-app/src/index.html",
+            "main": "projects/multi-search-example-app/src/main.ts",
+            "polyfills": [
+              "zone.js"
+            ],
+            "tsConfig": "projects/multi-search-example-app/tsconfig.app.json",
+            "assets": [
+              "projects/multi-search-example-app/src/favicon.ico",
+              "projects/multi-search-example-app/src/assets"
+            ],
+            "styles": [
+              "@angular/material/prebuilt-themes/deeppurple-amber.css",
+              "projects/multi-search-example-app/src/styles.css"
+            ],
+            "scripts": []
+          },
+          "configurations": {
+            "production": {
+              "budgets": [
+                {
+                  "type": "initial",
+                  "maximumWarning": "500kb",
+                  "maximumError": "1mb"
+                },
+                {
+                  "type": "anyComponentStyle",
+                  "maximumWarning": "2kb",
+                  "maximumError": "4kb"
+                }
+              ],
+              "outputHashing": "all"
+            },
+            "development": {
+              "buildOptimizer": false,
+              "optimization": false,
+              "vendorChunk": true,
+              "extractLicenses": false,
+              "sourceMap": true,
+              "namedChunks": true
+            }
+          },
+          "defaultConfiguration": "production"
+        },
+        "serve": {
+          "builder": "@angular-devkit/build-angular:dev-server",
+          "configurations": {
+            "production": {
+              "browserTarget": "multi-search-example-app:build:production"
+            },
+            "development": {
+              "browserTarget": "multi-search-example-app:build:development"
+            }
+          },
+          "defaultConfiguration": "development"
+        },
+        "extract-i18n": {
+          "builder": "@angular-devkit/build-angular:extract-i18n",
+          "options": {
+            "browserTarget": "multi-search-example-app:build"
+          }
+        },
+        "test": {
+          "builder": "@angular-devkit/build-angular:karma",
+          "options": {
+            "polyfills": [
+              "zone.js",
+              "zone.js/testing"
+            ],
+            "tsConfig": "projects/multi-search-example-app/tsconfig.spec.json",
+            "assets": [
+              "projects/multi-search-example-app/src/favicon.ico",
+              "projects/multi-search-example-app/src/assets"
+            ],
+            "styles": [
+              "@angular/material/prebuilt-themes/deeppurple-amber.css",
+              "projects/multi-search-example-app/src/styles.css"
+            ],
+            "scripts": []
+          }
+        }
+      }
     }
   }
 }
